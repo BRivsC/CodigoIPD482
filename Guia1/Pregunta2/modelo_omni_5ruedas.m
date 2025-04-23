@@ -34,11 +34,12 @@ theta_5 = 8*pi/5;
 
 % A: Matriz de restricciones para cada rueda. Cada fila corresponde a una
 % rueda
-A=[ sin(theta_1) -cos(theta_1) -L*cos(theta_1); 
-    sin(theta_2) -cos(theta_2) -L*cos(theta_2); 
-    sin(theta_3) -cos(theta_3) -L*cos(theta_3); 
-    sin(theta_4) -cos(theta_4) -L*cos(theta_4); 
-    sin(theta_5) -cos(theta_5) -L*cos(theta_5)]
+A=[ sin(theta_1) -cos(theta_1) -L; 
+    sin(theta_2) -cos(theta_2) -L;
+    sin(theta_3) -cos(theta_3) -L;
+    sin(theta_4) -cos(theta_4) -L;
+    sin(theta_5) -cos(theta_5) -L]
+
 
 % B: Matriz de radios de las ruedas. Cada fila corresponde a una rueda    
 B=[r 0 0 0 0;
@@ -57,6 +58,7 @@ Rdi=[cos(theta) -sin(theta)   0;
 Jglobal=simplify(Rdi*J)
 
 % Cálculo de la cinemática inversa respecto al sistema global
+J = simplify(J)
 invJ=pinv(J); %matriz Jacobiana inversa
 Rin=[cos(theta) sin(theta) 0;-sin(theta) cos(theta) 0;0 0 1];
 invJglobal=simplify(invJ*Rin)
