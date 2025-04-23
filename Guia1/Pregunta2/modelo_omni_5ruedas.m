@@ -11,7 +11,7 @@ clear; close; clc;
 %Creación de variables simbólicas
 % r: Radio de las ruedas
 % L: Distancia del centro del robot hacia la rueda
-% theta: Ángulo de pose del robot
+% theta: Ángulo de 
 syms r L theta;
 %Cálculo de la cinemática directa respecto al sistema global
 % Ángulos de las ruedas
@@ -47,7 +47,16 @@ Rdi=[cos(theta) -sin(theta)   0;
 Jglobal=simplify(Rdi*J)
 
 % Cálculo de la cinemática inversa respecto al sistema global
-J = simplify(J)
+
 invJ=pinv(J); %matriz Jacobiana inversa
 Rin=[cos(theta) sin(theta) 0;-sin(theta) cos(theta) 0;0 0 1];
 invJglobal=simplify(invJ*Rin)
+
+%% Mostrar en consola las matrices obtenidas
+clc
+A_round = vpa(A,2)
+B_round = vpa(B,2)
+J_round = vpa(J,2)
+Jglobal_round = vpa(expand(Jglobal),2)
+invJ_round = vpa(invJ,2)
+invJglobal_round = vpa(expand(invJglobal),2)
