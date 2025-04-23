@@ -23,19 +23,40 @@ invJglobal=simplify(invJ*Rin)
 %% Lo mío: Omnidireccional 5 ruedas
 clear; close; clc; 
 %Creación de variables simbólicas
-syms r L theta
+syms r L theta;
 %Cálculo de la cinemática directa respecto al sistema global
+% Ángulos de las ruedas
+theta_1 = 0;
+theta_2 = 2*pi/5;
+theta_3 = 4*pi/5;
+theta_4 = 6*pi/5;
+theta_5 = 8*pi/5;
+
 % A: Matriz de restricciones para cada rueda. Cada fila corresponde a una
 % rueda
-A=[ sin(0) -1/2 -L; 
-   0             1 -L; 
-   -sqrt(3)/2 -1/2 -L]
+A=[ sin(theta_1) -cos(theta_1) -L*cos(theta_1); 
+    sin(theta_2) -cos(theta_2) -L*cos(theta_2); 
+    sin(theta_3) -cos(theta_3) -L*cos(theta_3); 
+    sin(theta_4) -cos(theta_4) -L*cos(theta_4); 
+    sin(theta_5) -cos(theta_5) -L*cos(theta_5)]
 
-B=[r 0 0; 0 r 0;0 0 r]
-J=simplify(inv(A)*B) %matriz Jacobiana directa
-Rdi=[cos(theta) -sin(theta) 0;sin(theta) cos(theta) 0;0 0 1];
+% B: Matriz de radios de las ruedas. Cada fila corresponde a una rueda    
+B=[r 0 0 0 0;
+   0 r 0 0 0;
+   0 0 r 0 0;
+   0 0 0 r 0;
+   0 0 0 0 r] 
+
+% Matriz Jacobiana directa
+J=simplify(inv(A)*B) 
+
+% Matriz de rotación
+Rdi=[cos(theta) -sin(theta)   0;
+     sin(theta)  cos(theta)   0;
+             0            0   1];
 Jglobal=simplify(Rdi*J)
-%Cáculo de la cinemática inversa respecto al sistema global
+
+% Cálculo de la cinemática inversa respecto al sistema global
 invJ=inv(J); %matriz Jacobiana inversa
 Rin=[cos(theta) sin(theta) 0;-sin(theta) cos(theta) 0;0 0 1];
 invJglobal=simplify(invJ*Rin)
