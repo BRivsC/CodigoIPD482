@@ -48,7 +48,7 @@ B=[r 0 0 0 0;
    0 0 0 0 r] 
 
 % Matriz Jacobiana directa
-J=simplify(inv(A)*B) 
+J=simplify(pinv(A)*B) 
 
 % Matriz de rotación
 Rdi=[cos(theta) -sin(theta)   0;
@@ -57,6 +57,6 @@ Rdi=[cos(theta) -sin(theta)   0;
 Jglobal=simplify(Rdi*J)
 
 % Cálculo de la cinemática inversa respecto al sistema global
-invJ=inv(J); %matriz Jacobiana inversa
+invJ=pinv(J); %matriz Jacobiana inversa
 Rin=[cos(theta) sin(theta) 0;-sin(theta) cos(theta) 0;0 0 1];
 invJglobal=simplify(invJ*Rin)
