@@ -44,6 +44,9 @@ J=simplify(pinv(A)*B)
 Rdi=[cos(theta) -sin(theta)   0;
      sin(theta)  cos(theta)   0;
              0            0   1];
+
+% Jacobiana directa, ref. global
+% Permite hacer la simulación
 Jglobal=simplify(Rdi*J)
 
 % Cálculo de la cinemática inversa respecto al sistema global
