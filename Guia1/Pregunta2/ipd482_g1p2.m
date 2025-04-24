@@ -82,3 +82,39 @@ end
  xlabel('Tiempo (s)')
  ylabel('Velocidad angular (rad/s)')
  legend('w1','w2','w3','w4','w5','orientation','horizontal')
+
+ 
+%% Animación del robot
+figure;
+hold on;
+axis equal;
+xlabel('X');
+xlim([-0.5 2.5]);
+pause(2); % Pausa para que el gráfico no se recorte mientras renderiza. Gracias Matlab
+ylabel('Y');
+ylim([-1 1]); % Ajustar límites en Y si es necesario
+title('Animación de la trayectoria del robot');
+% quiver(x_linea, y_linea, cos(ang), sin(ang), 'k--'); % Camino de referencia
+
+flecha_pose = quiver(0, 0, 0, 0, 'r', 'LineWidth', 2); % Inicialización del robot
+cuerpo_robot = plot(0, 0, 'b'); % Inicialización del círculo
+
+for k = 1:MAX_PTS
+    % Actualizar posición y orientación del robot
+    x_pos = camino(k, 1);
+    y_pos = camino(k, 2);
+    theta = camino(k, 3);
+    
+    % Actualizar flecha del robot con largo 0.2
+    set(flecha_pose, 'XData', x_pos, 'YData', y_pos, ...
+        'UData', 0.2 * cos(theta), 'VData', 0.2 * sin(theta));
+    
+    % Dibujar círculo centrado en el origen de la flecha
+    theta_circle = linspace(0, 2 * pi, 100);
+    x_circle = 0.2 * cos(theta_circle) + x_pos;
+    y_circle = 0.2 * sin(theta_circle) + y_pos;
+    set(cuerpo_robot, 'XData', x_circle, 'YData', y_circle);
+    exportgraphics(gcf,'testAnimated.gif','Append',true);
+    
+    % pause(0.4); % Pausa para la animación
+end
