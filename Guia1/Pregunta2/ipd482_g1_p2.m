@@ -92,7 +92,6 @@ xlabel('X');
 xlim([-0.5 2.5]);
 pause(2); % Pausa para que el gráfico no se recorte mientras renderiza. Gracias Matlab
 ylabel('Y');
-ylim([-1 1]); % Ajustar límites en Y si es necesario
 title('Animación de la trayectoria del robot');
 % quiver(x_linea, y_linea, cos(ang), sin(ang), 'k--'); % Camino de referencia
 
