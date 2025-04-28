@@ -27,10 +27,9 @@ tspan = [0 5];
 q = [0; 0; 0; 0; 0; zeros(4,1)];
 
 %% Perfil de torques
-%tauL = @(t) 50*(t<5) + 20*(t>=5);
-%tauR = @(t) 30*sin(0.5*t) + 40;
-tauL = @(t) 10;
+tauL = @(t) -10;
 tauR = @(t) 10;
+
 %% Integrar
 opts = odeset('RelTol',1e-6,'AbsTol',1e-8);
 [T,Y] = ode45(@(t,y) dynamics(t,y), tspan, q, opts);
@@ -41,10 +40,10 @@ Y(:,1:2) = Y(:,1:2)/100;
 figure(1);
 plot(Y(:,1),Y(:,2),'LineWidth',1.5); axis equal; grid on
 xlabel('X [m]'); ylabel('Y [m]');
-title('Trayectoria en línea recta');
+title('Trayectoria con ruedas contrapuestas');
 
 figure(2);
-sgtitle('Velocidad lineal y angular en línea recta');
+sgtitle('Velocidades con ruedas contrapuestas');
 subplot(2,1,1), plot(T,Y(:,4)/100), ylabel('v_x [m/s]'), grid on
 title('Velocidad lineal')
 subplot(2,1,2), plot(T,Y(:,5)), ylabel('w [rad/s]'), xlabel('t [s]'), grid on
@@ -102,12 +101,12 @@ end
 figure(3);
 hold on;
 grid on;
-axis([min(Y(:,1))-2 max(Y(:,1))+2 min(Y(:,2))-2 max(Y(:,2))+2]);
+axis([min(Y(:,1))-2 max(Y(:,1))+2 min(Y(:,2))-5 max(Y(:,2))+5]);
 axis equal;
 frameskip = 100; % Muestras que se salta. 
                 % Útil para manejar rapidez de animación
 pause(2); % Pausa para evitar recorte al renderizar
-title('Trayectoria con línea recta');
+title('Trayectoria con ruedas contrapuestas');
 
 % Tamaño del robot [largo, ancho]
 robot_size = [0.5*10, 0.4*10]; % metros
@@ -127,7 +126,7 @@ for k = 1:frameskip:length(Y(:,1))
     set(robot_patch, 'XData', xv, 'YData', yv);
     
     drawnow;
-    exportgraphics(gcf,'p4_anim_recta.gif','Append',true);
+    exportgraphics(gcf,'p4_anim_contra.gif','Append',true);
 end
 
 %%
