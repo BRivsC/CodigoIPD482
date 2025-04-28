@@ -1,4 +1,4 @@
-%% Guía 1 IPD482, pregunta 2
+%% Guía 1 IPD482
 % Pregunta 2: Perfiles de velocidad de omnidireccional de 5 ruedas
 % Bastián Rivas
 clear; close all; clc;
