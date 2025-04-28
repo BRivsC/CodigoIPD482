@@ -9,7 +9,7 @@ clear; clc; close all;
 m   = 50;        % masa [kg]
 I   = 2.0;       % inercia [kg·m^2]
 r   = 0.15;      % radio de rueda [m]
-c   = 0.3;       % semiancho chassis [m]
+c   = 0.215;     % semiancho chassis [m]
 x0  = 0.1;       % ICR operativo [m]
 
 %% Parámetros LuGre (idénticos en cada rueda)
@@ -29,22 +29,26 @@ q = [0; 0; 0; 0; 0; zeros(4,1)];
 %% Perfil de torques
 %tauL = @(t) 50*(t<5) + 20*(t>=5);
 %tauR = @(t) 30*sin(0.5*t) + 40;
-tauL = @(t) 0;
-tauR = @(t) 0.3;
+tauL = @(t) 10;
+tauR = @(t) 10;
 %% Integrar
 opts = odeset('RelTol',1e-6,'AbsTol',1e-8);
 [T,Y] = ode45(@(t,y) dynamics(t,y), tspan, q, opts);
 
 %% Plots
-figure;
+% Reescalado para que se visualice mejor
+Y(:,1:2) = Y(:,1:2)/100;
+figure(1);
 plot(Y(:,1),Y(:,2),'LineWidth',1.5); axis equal; grid on
 xlabel('X [m]'); ylabel('Y [m]');
-title('Trayectoria del tractor skid-steer');
+title('Trayectoria en línea recta');
 
-figure;
-subplot(2,1,1), plot(T,Y(:,4)), ylabel('v_x [m/s]'), grid on
-subplot(2,1,2), plot(T,Y(:,5)), ylabel('\omega [rad/s]'), xlabel('t [s]'), grid on
-
+figure(2);
+sgtitle('Velocidad lineal y angular en línea recta');
+subplot(2,1,1), plot(T,Y(:,4)/100), ylabel('v_x [m/s]'), grid on
+title('Velocidad lineal')
+subplot(2,1,2), plot(T,Y(:,5)), ylabel('w [rad/s]'), xlabel('t [s]'), grid on
+title('Velocidad angular')
 %% --- función de dinámica ---
 function dy = dynamics(t,y)
   % parámetros en workspace
@@ -92,4 +96,54 @@ function dy = dynamics(t,y)
   th_dot = w;
   
   dy = [X_dot; Y_dot; th_dot; vx_dot; w_dot; dz];
+end
+
+%% Animación del robot 
+figure(3);
+hold on;
+grid on;
+axis([min(Y(:,1))-2 max(Y(:,1))+2 min(Y(:,2))-2 max(Y(:,2))+2]);
+axis equal;
+frameskip = 100; % Muestras que se salta. 
+                % Útil para manejar rapidez de animación
+pause(2); % Pausa para evitar recorte al renderizar
+title('Trayectoria con línea recta');
+
+% Tamaño del robot [largo, ancho]
+robot_size = [0.5*10, 0.4*10]; % metros
+
+% Crear "patch" para el robot
+robot_patch = fill(NaN, NaN, 'r'); % Rectángulo rojo
+
+for k = 1:frameskip:length(Y(:,1))
+    % Extrae posición y orientación
+    pos = [Y(k,1); Y(k,2)];   % (X,Y)
+    theta = Y(k,3);           % orientación [rad]
+    
+    % Calcular vértices del patch
+    [xv, yv] = rect_patch(pos, theta, robot_size);
+    
+    % Actualizar patch
+    set(robot_patch, 'XData', xv, 'YData', yv);
+    
+    drawnow;
+    exportgraphics(gcf,'p4_anim_recta.gif','Append',true);
+end
+
+%%
+function [xv, yv] = rect_patch(center, theta, size)
+% center = [x; y], theta en radianes, size = [largo ancho]
+L = size(1); W = size(2);
+
+% Coordenadas del rectángulo centrado en (0,0)
+x_corners = [-L/2, L/2, L/2, -L/2];
+y_corners = [-W/2, -W/2, W/2, W/2];
+
+% Rotación
+R = [cos(theta), -sin(theta); sin(theta), cos(theta)];
+coords = R * [x_corners; y_corners];
+
+% Traslación
+xv = coords(1,:) + center(1);
+yv = coords(2,:) + center(2);
 end
