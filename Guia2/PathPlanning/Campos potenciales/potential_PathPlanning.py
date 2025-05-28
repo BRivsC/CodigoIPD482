@@ -171,8 +171,95 @@ def main():
     robot_radius = 5.0  # robot radius [m]
 
     # Obstáculos van de izquierda a derecha, de abajo hacia arriba
-    obstacle_x = [-10.6006,     -8.3,    -8.4,   -8.25,  -8.3506,   -7.450,   -3.450, -1.125, -1.075, -1.000,   0.500,  6.700, 6.725,  5.9494, 10.1994, 10.2744 ]   # obstacle x position list [m]
-    obstacle_y = [-9.99567, -9.60222, -6.1022, -2.3522,  0.46433,  6.12278, 6.172278, -9.725, -4.550,  0.650, 6.12278, -8.300, 0.675, 7.38933, 4.56443, 10.11433]   # obstacle y position list [m]
+    # obstacle x position list [m]
+    obstacle_x = [-10.6006, ##/shape[3]
+                      -8.3, ##/sofa[4]
+                      -8.4, ##/sofa[3]
+                     -8.25, ##/sofa[5]
+                   -8.3506, ##/shape[1]
+                    -7.450, ##/sofa[2]
+                    -3.450, ##/sofa[0]
+
+                    -1.125-2.5, ##/ConcretBlock[2]
+                    -1.125,     ##/ConcretBlock[2]
+                    -1.125+2.5, ##/ConcretBlock[2]
+
+                    -1.075-2.5, ##/ConcretBlock[1]
+                    -1.075,     ##/ConcretBlock[1]
+                    -1.075+2.5, ##/ConcretBlock[1]
+
+                    -1.000-2.5, ##/ConcretBlock[0]
+                    -1.000,     ##/ConcretBlock[0]
+                    -1.000+2.5, ##/ConcretBlock[0]
+
+                     0.500, ##/sofa[1]
+                     
+                     6.700, ##/ConcretBlock[3]
+                     6.700, ##/ConcretBlock[3]
+                     6.700, ##/ConcretBlock[3]
+
+                     6.725, ##/ConcretBlock[4]
+                     6.725, ##/ConcretBlock[4]
+                     6.725, ##/ConcretBlock[4]
+
+                    5.9494, ##/shape[4]
+                   10.1994, ##/shape[5]
+                   10.2744  ##/shape[2]
+                   ]   
+    
+    # obstacle y position list [m]
+    obstacle_y = [-9.99567, ##/shape[3]
+                  -9.60222, ##/sofa[4]
+                   -6.1022, ##/sofa[3]
+                   -2.3522, ##/sofa[5]
+                   0.46433, ##/shape[1]
+                   6.12278, ##/sofa[2]
+                  6.172278, ##/sofa[0]
+
+                    -9.725, ##/ConcretBlock[2]
+                    -9.725, ##/ConcretBlock[2]
+                    -9.725, ##/ConcretBlock[2]
+
+                    -4.550, ##/ConcretBlock[1]
+                    -4.550, ##/ConcretBlock[1]
+                    -4.550, ##/ConcretBlock[1]
+
+                     0.650, ##/ConcretBlock[0]
+                     0.650, ##/ConcretBlock[0]
+                     0.650, ##/ConcretBlock[0]
+
+                   6.12278, ##/sofa[1]
+
+                    -8.300-2.5, ##/ConcretBlock[3]
+                    -8.300,     ##/ConcretBlock[3]
+                    -8.300+2.5, ##/ConcretBlock[3]
+
+                     0.675-2.5, ##/ConcretBlock[4]
+                     0.675,     ##/ConcretBlock[4]
+                     0.675+2.5, ##/ConcretBlock[4]
+
+                   7.38933, ##/shape[4]
+                   4.56443, ##/shape[5]
+                  10.11433  ##/shape[2]
+                  ]   
+# Listado de obstáculos en orden:
+##/shape[3]
+##/sofa[4]
+##/sofa[3]
+##/sofa[5]
+##/shape[1]
+##/sofa[2]
+##/sofa[0]
+##/ConcretBlock[2]
+##/ConcretBlock[1]
+##/ConcretBlock[0]
+##/sofa[1]
+##/ConcretBlock[3]
+##/ConcretBlock[4]
+##/shape[4]
+##/shape[5]
+##/shape[2]
+
 
     if show_animation:
         plt.grid(False)
