@@ -168,7 +168,7 @@ def main():
     goal_x = 9.0  # goal x position [m]
     goal_y = 7.0  # goal y position [m]
     grid_size = 0.5  # potential grid size [m]
-    robot_radius = 5.0  # robot radius [m]
+    robot_radius = 2.0  # robot radius [m]
 
     # Obstáculos van de izquierda a derecha, de abajo hacia arriba
     # obstacle x position list [m]
@@ -268,6 +268,11 @@ def main():
     # path generation
     path_x, path_y = potential_field_planning(
         start_x, start_y, goal_x, goal_y, obstacle_x, obstacle_y, grid_size, robot_radius)
+    # print("path_x: ", path_x)
+    # print("path_y: ", path_y)
+    print("Camino generado:")
+    for i in range(len(path_x)):
+        print("({},{})".format(path_x[i], path_y[i]))
     # plt.plot(path_x, path_y, "-r", label="path")
     # plt.show
     if show_animation:
@@ -278,4 +283,3 @@ if __name__ == '__main__':
     print(__file__ + " start!!")
     main()
     print(__file__ + " Done!!")
-7
