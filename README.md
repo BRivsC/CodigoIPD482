@@ -12,6 +12,14 @@ El repositorio está organizado en carpetas que corresponden a las distintas gu�
   - **`Pregunta3/`**: Código para simular y animar la cinemática de un N-trailer de 2 trailers pasivos.
   - **`Pregunta4/`**: Código para simular y animar la dinámica de un robot skid steer cuyas ruedas están sujetas a roce.
   
+- **`Guia2/`**: Contiene los ejercicios relacionados con la simulación de un sistema G1T tanto en Coppelia como en Python.
+  - **`ControlG1T/`**: Control hecho en el sistema G1T para seguir el camino trazado por campos potenciales y RTT.
+  - **`PathPlanning/`**: Código para generar trayectorias utilizando RTT y Campos potenciales.
+  - **`TestsModeloDin/`**: Implementaciones del modelo dinámico del sistema G1T.
+  - **`demo/`**: Videos de demostración.
+  - **`old/`**: Código utilizado anteriormente para prototipado y ensayos.
+  - **`IPD482_guia2_2025_1.pdf`**: Archivo con las preguntas desarrolladas durante este trabajo.
+  
 - **Otras carpetas**: Se agregarán a medida que se desarrollen más ejercicios y proyectos.
 
 ## Requisitos
