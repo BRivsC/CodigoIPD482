@@ -1,0 +1,47 @@
+---
+description: Fomenta minimizar las dependencias directas entre módulos, prefiriendo la comunicación a través de interfaces o abstracciones para reducir el impacto de los cambios
+globs: 
+alwaysApply: false
+---
+# Bajo Acoplamiento: Minimizar Interdependencias
+
+- **Reducir Dependencias Directas:** Los módulos deben conocer lo menos posible sobre los detalles internos de otros módulos.[10, 11]
+- **Comunicación vía Interfaces/Abstracciones:** La interacción entre módulos debe realizarse preferentemente a través de interfaces estables o contratos abstractos, en lugar de depender de implementaciones concretas. Esto se alinea con el Principio de Inversión de Dependencias (DIP).
+- **Eventos o Mensajería:** Para una mayor desacoplamiento, considera el uso de patrones basados en eventos o sistemas de mensajería donde los módulos publican eventos o envían mensajes sin conocer a los consumidores directos.
+
+Un alto acoplamiento significa que los módulos están intrincadamente conectados. En tal escenario, un cambio en un módulo a menudo requiere cambios en cascada en muchos otros módulos.[11] Este "efecto dominó" incrementa el tiempo de desarrollo, el esfuerzo de prueba y el riesgo de introducir nuevos errores. Por el contrario, el bajo acoplamiento confina el impacto de un cambio a un área más pequeña y controlada del sistema. Esto hace que el software sea más resiliente a los cambios, más fácil de evolucionar y menos propenso a romperse inesperadamente cuando se modifica una parte. Los módulos débilmente acoplados también son más fáciles de reemplazar o reutilizar en diferentes contextos.
+
+- **Ejemplo (Conceptual - Notificación tras una acción):**
+  ```typescript
+  // Alto Acoplamiento: El servicio de usuarios conoce directamente el servicio de email.
+  class ServicioEmailConcreto {
+    enviarEmailBienvenida(email: string) { /*... */ }
+  }
+  class ServicioUsuariosAcoplado {
+    private emailService: ServicioEmailConcreto;
+    constructor() {
+      this.emailService = new ServicioEmailConcreto(); // Creación directa
+    }
+    registrarUsuario(email: string, pass: string) {
+      //... lógica de registro...
+      this.emailService.enviarEmailBienvenida(email);
+    }
+  }
+
+  // Bajo Acoplamiento: El servicio de usuarios depende de una interfaz Notificador.
+  interface Notificador {
+    notificarRegistro(email: string): void;
+  }
+  class EmailNotificador implements Notificador {
+    notificarRegistro(email: string) { /* envía email de bienvenida */ }
+  }
+  class ServicioUsuariosDesacoplado {
+    private notificador: Notificador;
+    constructor(notificador: Notificador) { // Inyección de dependencia
+      this.notificador = notificador;
+    }
+    registrarUsuario(email: string, pass: string) {
+      //... lógica de registro...
+      this.notificador.notificarRegistro(email);
+    }
+  }

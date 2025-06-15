@@ -1,0 +1,40 @@
+---
+description: 
+globs: **/*.py
+alwaysApply: false
+---
+**Descripción:** "Promueve el uso de type hints en Python para mejorar la robustez del código, facilitar la refactorización y permitir la detección temprana de errores mediante análisis estático con `mypy`."
+# Uso Efectivo de "Type Hints" en Python
+
+- **Anotar Funciones y Métodos:** Añade type hints a los parámetros y al valor de retorno de todas las nuevas funciones y métodos.
+  ```python
+  def saludar(nombre: str) -> str:
+      return f"Hola, {nombre}"
+  
+  class Calculadora:
+      def sumar(self, a: int, b: int) -> int:
+          return a + b
+
+    Anotar Variables: También puedes anotar variables, especialmente si su tipo no es obvio por la asignación.
+    Python
+
+usuarios: list[str] =
+contador: int = 0
+
+Utilizar el Módulo typing: Para tipos más complejos, importa y utiliza los tipos proporcionados por el módulo typing (o equivalentes en versiones más nuevas de Python, como list en lugar de List desde Python 3.9).
+
+    List, Dict, Tuple, Set (ej. list[int], dict[str, float])
+    Optional[X] (equivalente a X | None): Para valores que pueden ser X o None.
+    Union[X, Y] (equivalente a X | Y): Para valores que pueden ser de tipo X o Y.
+    Callable, ReturnType]: Para funciones o métodos.
+    Any: Úsalo con moderación cuando un tipo no pueda ser más específico. Evitarlo si es posible.
+    TypeVar: Para crear genéricos.
+    NewType: Para crear tipos nominales distintos.
+
+Integrar mypy: Utiliza mypy (u otro verificador de tipos como Pyright o Pytype) para realizar análisis estático de tipos en tu código.
+
+    Ejecuta mypy como parte de tu proceso de CI/CD para capturar errores de tipo antes de que lleguen a producción.
+    Configura mypy (ej. a través de mypy.ini o pyproject.toml) para ajustar su comportamiento (ej. strict = true).
+
+Anotación Gradual: Para bases de código existentes, considera adoptar type hints de forma gradual, comenzando por las partes más críticas o nuevas.
+Docstrings vs. Type Hints: Los type hints se enfocan en la firma de la función. Los docstrings todavía son útiles para explicar qué hace la función, el significado de los parámetros, etc.

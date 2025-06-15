@@ -1,0 +1,46 @@
+---
+description: Establece el uso de mensajes de commit claros, concisos y estandarizados siguiendo la especificación de Conventional Commits para mejorar la legibilidad del historial y habilitar automatizaciones.
+globs: 
+alwaysApply: false
+---
+# Mensajes de Commit Significativos: Usar Conventional Commits
+
+- **Formato Estándar:** Los mensajes de commit deben seguir la estructura de Conventional Commits: `<tipo>[ámbito opcional]: <descripción>`.[21, 22, 23, 24]
+  - El cuerpo del mensaje (opcional) debe comenzar después de una línea en blanco de la descripción.
+  - El pie de página (opcional) puede incluir información sobre `BREAKING CHANGE` o referencias a issues.
+- **Tipos Comunes:** Utiliza tipos estándar para comunicar la naturaleza del cambio (ver tabla abajo).
+- **Descripción Clara y Concisa:** La descripción debe ser breve (idealmente < 50 caracteres) y en imperativo presente (ej. "Añadir" en lugar de "Añadido" o "Añade").
+- **Cuerpo para Detalles:** Si la descripción no es suficiente, utiliza el cuerpo del commit para explicar el *qué* y el *por qué* del cambio con más detalle.
+- **Breaking Changes:** Indica claramente los cambios que rompen la compatibilidad en el pie de página, comenzando con `BREAKING CHANGE:`.
+
+La adopción de Conventional Commits transforma el historial de Git de una simple lista de cambios a una fuente rica de información estructurada. Esto facilita enormemente la navegación y comprensión del historial del proyecto. Además, la estructura predecible de los mensajes permite la automatización de tareas importantes como la generación de changelogs, la determinación automática de incrementos de versión semántica (SemVer), y la activación de procesos de build y despliegue basados en la naturaleza de los commits.[22, 23]
+
+- **Tabla de Tipos Comunes de Conventional Commits:**
+
+| Tipo | Descripción | Ejemplo de Uso SemVer |
+|------------|----------------------------------------------------------------------------------|-----------------------|
+| `feat` | Una nueva característica para el usuario (corresponde a `MINOR` en SemVer). | `MINOR` |
+| `fix` | Una corrección de un bug para el usuario (corresponde a `PATCH` en SemVer). | `PATCH` |
+| `docs` | Cambios únicamente en la documentación. | Ninguno |
+| `style` | Cambios que no afectan el significado del código (espacios, formato, etc.). | Ninguno |
+| `refactor` | Un cambio en el código que no corrige un bug ni añade una característica. | Ninguno (o `PATCH`) |
+| `perf` | Un cambio en el código que mejora el rendimiento. | `PATCH` |
+| `test` | Añadir pruebas faltantes o corregir pruebas existentes. | Ninguno |
+| `build` | Cambios que afectan el sistema de build o dependencias externas (ej. Gulp, npm). | `PATCH` |
+| `ci` | Cambios en los archivos y scripts de configuración de CI (ej. Travis, CircleCI). | Ninguno |
+| `chore` | Otros cambios que no modifican el código fuente o los archivos de prueba. | Ninguno |
+| `revert` | Revierte un commit anterior. | Ninguno |
+  *Nota: Un `!` después del ámbito o tipo (ej. `feat(api)!:`) o un `BREAKING CHANGE:` en el pie indica un cambio que rompe la compatibilidad (corresponde a `MAJOR` en SemVer).*
+
+- **Ejemplos de Mensajes de Commit:**
+
+feat: permitir a los usuarios subir avatares personalizados
+
+fix(auth): corregir redirección incorrecta después del login
+
+docs: actualizar la guía de instalación con nuevos prerrequisitos
+
+refactor!: eliminar endpoint obsoleto /v1/data
+
+BREAKING CHANGE: El endpoint /v1/data ha sido eliminado.
+Usar /v2/data en su lugar.

@@ -1,0 +1,55 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Principio KISS: Mantenlo Simple, Estúpido
+
+- **Preferir Soluciones Directas:** Opta por la solución más simple y clara que resuelva el problema eficazmente. Evita la complejidad artificial o las soluciones sobreingenieradas.[3]
+- **Evitar Complejidad Innecesaria:** No añadas características, abstracciones o capas de indirección a menos que aporten un valor claro y justificado al problema actual.
+- **Descomponer Problemas:** Divide los problemas complejos en partes más pequeñas y manejables. Cada parte debe ser simple de entender y resolver individualmente.
+- **Claridad sobre Astucia:** El código debe ser fácil de leer y entender por otros desarrolladores (y por tu yo futuro). Evita trucos de lenguaje o construcciones excesivamente complejas por el simple hecho de ser "ingeniosas".
+
+La complejidad es uno de los principales impulsores de la deuda técnica. Los sistemas complejos son inherentemente más difíciles de comprender, modificar y probar.[3] Cada cambio en un sistema complejo tiene una mayor probabilidad de introducir errores o efectos secundarios no deseados. El principio KISS aboga por minimizar esta complejidad desde el inicio. Al buscar activamente la simplicidad, los desarrolladores reducen la probabilidad de acumular deuda técnica, lo que resulta en software más sostenible y fácil de mantener a largo plazo. Esto no significa simplificar en exceso hasta el punto de comprometer la funcionalidad, sino encontrar la forma más elegante y eficiente de alcanzar los objetivos del software sin adornos innecesarios.
+
+- **Ejemplo (Conceptual - Lógica de Decisión):**
+  ```javascript
+  // Antes de KISS (Potencialmente complejo)
+  function determinarAcceso(usuario, recurso, contexto) {
+    let acceso = false;
+    if (usuario.esAdmin) {
+      acceso = true;
+    } else if (recurso.esPublico && contexto.metodo === 'GET') {
+      acceso = true;
+    } else if (usuario.permisos.includes(recurso.id) && !recurso.estaBloqueado) {
+      if (contexto.requiereAutenticacionDosFactores && !usuario.tieneDosFactores) {
+        acceso = false;
+      } else {
+        acceso = true;
+      }
+    }
+    //... más condiciones anidadas
+    return acceso;
+  }
+
+  // Después de KISS (Más simple, posiblemente refactorizado en funciones más pequeñas)
+  function tienePermisoBasico(usuario, recurso) {
+    return usuario.esAdmin || (recurso.esPublico && !recurso.estaBloqueado);
+  }
+
+  function cumpleRequisitosAdicionales(usuario, contexto) {
+    if (contexto.requiereAutenticacionDosFactores) {
+      return usuario.tieneDosFactores;
+    }
+    return true;
+  }
+
+  function determinarAccesoSimple(usuario, recurso, contexto) {
+    if (tienePermisoBasico(usuario, recurso)) {
+      return cumpleRequisitosAdicionales(usuario, contexto);
+    }
+    if (usuario.permisos.includes(recurso.id) && !recurso.estaBloqueado) {
+        return cumpleRequisitosAdicionales(usuario, contexto);
+    }
+    return false;
+  }

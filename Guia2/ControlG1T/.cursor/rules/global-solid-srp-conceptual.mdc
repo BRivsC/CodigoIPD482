@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# SRP Conceptual: Principio de Responsabilidad Única
+
+- **Una Razón para Cambiar:** Un módulo, función o componente debe ser responsable de una sola pieza de funcionalidad del sistema. Si hay más de una razón por la que podría necesitar ser modificado, probablemente está asumiendo demasiadas responsabilidades.
+- **Alta Cohesión:** Las partes de un módulo o función deben estar estrechamente relacionadas y contribuir a ese único propósito bien definido. Esto es la esencia de la alta cohesión.
+- **Foco Único:** Cada unidad de código debe hacer "una cosa y hacerla bien".
+
+Cuando un módulo o función tiene una única responsabilidad, se vuelve intrínsecamente más fácil de entender, ya que su propósito es claro y delimitado. Las pruebas se simplifican porque se puede verificar esa única pieza de funcionalidad de forma aislada. El debugging también se facilita, ya que los errores tienden a estar localizados dentro del ámbito de esa responsabilidad. Además, los componentes con una única responsabilidad son más propensos a ser reutilizados en otras partes del sistema o incluso en otros proyectos, porque no arrastran consigo funcionalidades no relacionadas.
+
+- **Ejemplo (Conceptual - Función):**
+  ```javascript
+  // Antes de SRP (Múltiples responsabilidades: obtener datos Y formatearlos)
+  function obtenerYFormatearDatosUsuario(userId) {
+    const usuario = apiClient.get(`/users/${userId}`); // Obtener datos
+    return `Nombre: ${usuario.nombre}, Email: ${usuario.email.toLowerCase()}`; // Formatear datos
+  }
+
+  // Después de SRP (Responsabilidades separadas)
+  function obtenerDatosUsuario(userId) {
+    return apiClient.get(`/users/${userId}`);
+  }
+
+  function formatearDatosUsuarioParaDisplay(usuario) {
+    return `Nombre: ${usuario.nombre}, Email: ${usuario.email.toLowerCase()}`;
+  }

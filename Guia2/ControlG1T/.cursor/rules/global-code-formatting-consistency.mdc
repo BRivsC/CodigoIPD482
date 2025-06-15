@@ -1,0 +1,31 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+- **Usar Herramientas Automáticas:** Integra linters (ej. ESLint, Pylint, RuboCop) y formateadores de código (ej. Prettier, Black, autopep8, gofmt) en el flujo de desarrollo y en los pipelines de CI/CD.
+- **Configuración Compartida:** Define una configuración de estilo compartida para estas herramientas a nivel de proyecto (ej. `.eslintrc`, `pyproject.toml`, `.prettierrc`) y asegúrate de que todos los miembros del equipo la utilicen.
+- **Indentación Clara:** Utiliza una indentación consistente (ej. 4 espacios para Python, 2 espacios para JavaScript/TypeScript, según la convención del equipo/lenguaje) para delimitar claramente los bloques de código y las estructuras de control.[13]
+- **Longitud de Línea Razonable:** Establece una longitud de línea máxima (ej. 80-120 caracteres) para mejorar la legibilidad y evitar el desplazamiento horizontal excesivo. Los formateadores suelen encargarse de esto.
+
+La consistencia en el formato del código, aunque pueda parecer una preocupación menor, tiene un impacto significativo en la legibilidad y la colaboración. Cuando el código sigue un estilo uniforme, los desarrolladores pueden concentrarse en la lógica subyacente en lugar de distraerse por variaciones estilísticas. Esto reduce la fricción cognitiva al leer código escrito por diferentes autores o en diferentes partes del proyecto. Las herramientas automáticas eliminan los debates sobre el estilo y aseguran que el código se adhiera a las convenciones sin esfuerzo manual, liberando a los desarrolladores para tareas más importantes.
+
+- **Ejemplo (Conceptual - La herramienta se encarga):**
+  ```javascript
+  // Código mal formateado
+  function  miFuncion(param1,param2){
+  if(param1 ===true){
+  console.log( "param1 es verdadero" );
+  } else {
+  return param2+1;
+  }
+  }
+
+  // Código bien formateado (por una herramienta como Prettier)
+  function miFuncion(param1, param2) {
+    if (param1 === true) {
+      console.log("param1 es verdadero");
+    } else {
+      return param2 + 1;
+    }
+  }

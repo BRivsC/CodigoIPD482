@@ -1,0 +1,54 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Manejo de Errores: Anticipar y Responder con Robustez
+
+- **Anticipar Fallos Potenciales:** Considera los puntos donde las operaciones pueden fallar (ej. llamadas de red, operaciones de E/S de archivos, interacciones con bases de datos, entradas inválidas).[44, 45]
+- **Detectar Errores:** Utiliza los mecanismos del lenguaje (ej. excepciones, códigos de retorno, tipos `Result`/`Either`) para detectar cuándo ocurren errores.[46]
+- **No Fallar Silenciosamente:** Evita ignorar errores o suprimirlos sin un manejo adecuado. Los errores no gestionados pueden llevar a comportamientos inesperados, corrupción de datos o vulnerabilidades de seguridad.[45]
+- **Manejo Específico vs. Genérico:** Siempre que sea posible, captura y maneja tipos de error específicos en lugar de errores genéricos. Esto permite una respuesta más adecuada a diferentes situaciones.
+- **Recuperación Grácil:** Intenta que la aplicación se recupere de los errores de una manera controlada. Esto podría implicar reintentar una operación, ofrecer una funcionalidad alternativa o informar al usuario de manera clara.
+- **Logging Detallado de Errores:** Registra información suficiente sobre los errores (stack traces, mensajes de error, contexto relevante como IDs de solicitud o datos de entrada) para facilitar la depuración y el monitoreo.[45]
+- **Mensajes de Error Informativos:** Proporciona mensajes de error que sean útiles tanto para los desarrolladores (en logs) como para los usuarios (en la UI, si aplica), sin revelar información sensible del sistema.[44, 45]
+- **Consistencia:** Adopta un enfoque consistente para el manejo de errores en toda la aplicación.
+
+Los errores son una parte inevitable de los sistemas de software. La forma en que una aplicación maneja estos errores determina en gran medida su fiabilidad y la percepción del usuario. Un manejo de errores deficiente puede llevar a caídas abruptas, pérdida de datos, exposición de vulnerabilidades de seguridad y una experiencia de usuario frustrante.[45] Por el contrario, un sistema con un manejo de errores robusto es más predecible, más fácil de depurar y mantener, y genera mayor confianza en los usuarios. Diferentes patrones de manejo de errores (como el uso de excepciones, códigos de retorno o tipos de resultado monádicos) tienen sus propias ventajas y desventajas; la elección debe ser consistente dentro de un sistema o módulo y adecuada al contexto específico.[46] El registro efectivo de errores es un componente clave, ya que proporciona la visibilidad necesaria para diagnosticar problemas en entornos de desarrollo y producción.
+
+- **Ejemplo (Conceptual - Patrón Try-Catch para excepciones):**
+  ```javascript
+  async function obtenerDatosDeAPI(url) {
+    try {
+      const respuesta = await fetch(url);
+
+      if (!respuesta.ok) {
+        // Error específico de la respuesta HTTP
+        const errorData = await respuesta.json().catch(() => ({})); // Intenta parsear JSON, o usa objeto vacío
+        console.error(`Error HTTP ${respuesta.status}: ${respuesta.statusText}`, { url, responseData: errorData });
+        throw new Error(`Fallo al obtener datos de la API: ${respuesta.status}`);
+      }
+
+      return await respuesta.json();
+    } catch (error) {
+      // Podría ser un error de red, o el error lanzado arriba
+      console.error("Error al obtener datos de la API:", error.message, { stack: error.stack, url });
+      // Aquí se podría re-lanzar un error más específico de la aplicación,
+      // o devolver un estado de error manejable por el llamador.
+      throw new Error("No se pudieron obtener los datos necesarios.");
+    }
+  }
+
+  async function procesarUsuario(idUsuario) {
+    try {
+      const datosUsuario = await obtenerDatosDeAPI(`/api/usuarios/${idUsuario}`);
+      //... procesar datosUsuario...
+      console.log("Usuario procesado:", datosUsuario.nombre);
+    } catch (error) {
+      // Manejar el error que pudo ser lanzado por obtenerDatosDeAPI
+      // o por el procesamiento subsiguiente.
+      console.error(`Fallo al procesar el usuario ${idUsuario}:`, error.message);
+      // Informar al usuario o tomar acción correctiva.
+      // ui.mostrarError("No se pudo cargar la información del usuario.");
+    }
+  }

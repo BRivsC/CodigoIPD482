@@ -1,0 +1,26 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Estrategia de Ramas: Organizar el Flujo de Desarrollo
+
+- **Definir una Estrategia:** El equipo debe acordar y seguir consistentemente una estrategia de ramas. Las opciones comunes incluyen:
+    - **GitHub Flow:** Simple y efectivo para CI/CD. `main` es siempre desplegable. Las nuevas características se desarrollan en ramas de feature que se fusionan a `main` tras revisión y pruebas, y se despliegan inmediatamente.[25, 26]
+    - **Trunk-Based Development (TBD):** Los desarrolladores integran sus cambios en la rama principal (`trunk` o `main`) frecuentemente (al menos una vez al día). Las ramas de feature, si se usan, son de muy corta duración (horas o pocos días).[27, 28] A menudo se usa con feature flags.
+    - **Gitflow:** Más complejo, con ramas `main`, `develop`, `feature/*`, `release/*`, `hotfix/*`. Puede ser adecuado para proyectos con ciclos de lanzamiento programados, pero se considera más pesado para CI/CD continuo.[29] (Notar que Atlassian lo considera un flujo "legacy" [29]).
+- **Ramas de Feature:** Para cualquier trabajo nuevo (características, bugs), crea una rama separada a partir de la rama principal de desarrollo (ej. `main` en GitHub Flow/TBD, `develop` en Gitflow).[30, 31]
+- **Ramas de Corta Duración:** Intenta que las ramas de feature sean lo más cortas posible para minimizar la divergencia con la rama principal y facilitar las fusiones.
+- **Integración Continua:** Fusiona los cambios a la rama principal frecuentemente después de que hayan pasado las pruebas y la revisión de código.
+
+Trabajar directamente en la rama principal (`main` o `trunk`) puede ser arriesgado, especialmente para cambios grandes o en equipos numerosos, ya que podría desestabilizar la base de código. Por otro lado, las ramas de feature que viven mucho tiempo pueden divergir significativamente de la rama principal, llevando a fusiones complejas y conflictivas ("merge hell"). Las estrategias modernas como GitHub Flow o Trunk-Based Development (con ramas de feature de corta duración) buscan un equilibrio, promoviendo la integración frecuente mientras proporcionan aislamiento para el desarrollo.[27, 32] La elección de la estrategia debe considerar el tamaño del equipo, la frecuencia de los lanzamientos y las prácticas de CI/CD. Para la mayoría de los proyectos modernos que apuntan a la entrega continua, GitHub Flow o TBD suelen ser preferibles a Gitflow tradicional debido a su simplicidad y ciclos de retroalimentación más rápidos.
+
+- **Ejemplo (Flujo general de GitHub Flow):**
+  1. Crear una nueva rama desde `main` para una nueva característica: `git checkout -b nueva-funcionalidad main`
+  2. Realizar cambios y commits en la rama `nueva-funcionalidad`.
+  3. Empujar la rama al repositorio remoto: `git push origin nueva-funcionalidad`
+  4. Abrir un Pull Request (PR) para fusionar `nueva-funcionalidad` en `main`.
+  5. Realizar revisión de código y ejecutar pruebas automatizadas en el PR.
+  6. Una vez aprobado y las pruebas pasan, fusionar el PR en `main`.
+  7. Desplegar `main` a producción (automáticamente si se practica CI/CD).
+  8. Eliminar la rama `nueva-funcionalidad` (opcional, pero recomendado).

@@ -1,0 +1,115 @@
+---
+description: Aconseja que los clientes no deben ser forzados a depender de interfaces (o signaturas de función con muchas dependencias) que no utilizan. Preferir interfaces más pequeñas y específicas.
+globs: 
+alwaysApply: false
+---
+# ISP Conceptual: Principio de Segregación de Interfaces
+
+- **Interfaces Específicas del Cliente:** En lugar de interfaces grandes y monolíticas, es preferible tener múltiples interfaces más pequeñas y cohesivas, cada una adaptada a las necesidades de un cliente específico o un conjunto de clientes relacionados.[7, 9]
+- **Evitar Dependencias Innecesarias:** Un cliente (código que usa un módulo o función) no debería verse obligado a implementar o depender de métodos o parámetros que no necesita.
+- **Aplicación Funcional:** En programación funcional, esto puede interpretarse como preferir funciones con menos parámetros y más enfocadas, o evitar que las funciones acepten grandes estructuras de datos de las cuales solo utilizan una pequeña parte.[8]
+
+La segregación de interfaces reduce el acoplamiento innecesario. Cuando un cliente depende de una interfaz "gorda" que contiene métodos que no utiliza, cualquier cambio en esos métodos no utilizados podría forzar una recompilación o modificación del cliente, aunque su funcionalidad principal no se vea afectada. Al usar interfaces más pequeñas y específicas, los clientes solo dependen de lo que realmente necesitan, lo que los hace más robustos a cambios en otras partes del sistema. Esto también mejora la usabilidad de los módulos y funciones, ya que sus "contratos" son más claros y menos intimidantes.
+
+- **Ejemplo (Conceptual - POO, pero la idea aplica a signaturas de funciones):**
+  ```python
+  # Antes de ISP (Interfaz "gorda")
+  class TrabajadorPolivalente:
+      def trabajar(self): pass
+      def comer(self): pass
+      def reportar_horas(self): pass
+      def asistir_reunion_estrategica(self): pass
+
+  class RobotTrabajador(TrabajadorPolivalente):
+      def trabajar(self): print("Robot trabajando...")
+      def comer(self): pass # Un robot no come, dependencia forzada
+      def reportar_horas(self): print("Robot reportando horas...")
+      def asistir_reunion_estrategica(self): pass # Un robot no asiste a reuniones estratégicas
+
+  # Después de ISP (Interfaces segregadas)
+  class ITrabajador:
+      def trabajar(self): pass
+      def reportar_horas(self): pass
+
+  class IComedor:
+      def comer(self): pass
+
+  class IParticipanteEstrategico:
+      def asistir_reunion_estrategica(self): pass
+
+  class Humano(ITrabajador, IComedor, IParticipanteEstrategico):
+      #... implementaciones...
+      pass
+
+  class RobotMejorado(ITrabajador): # Solo depende de lo que necesita
+      def trabajar(self): print("Robot trabajando...")
+      def reportar_horas(self): print("Robot reportando horas...")
+
+
+---
+**DIP Conceptual (Dependency Inversion Principle - Principio de Inversión de Dependencias)**
+
+**Nombre del Archivo:** `global-solid-dip-conceptual`
+**Tipo de Regla:** `Agent Requested`
+**Descripción:** "Sostiene que los módulos de alto nivel no deben depender de módulos de bajo nivel; ambos deben depender de abstracciones. Las abstracciones no deben depender de los detalles; los detalles deben depender de las abstracciones."
+**Contenido de la Regla:**
+```mdc
+# DIP Conceptual: Principio de Inversión de Dependencias
+
+- **Depender de Abstracciones, no de Concreciones:**
+    - Los módulos de alto nivel (que contienen la lógica de negocio principal) no deben depender directamente de módulos de bajo nivel (que realizan tareas detalladas como acceso a base de datos o llamadas de red).
+    - Ambos tipos de módulos deben depender de abstracciones (interfaces, firmas de funciones, contratos).[6, 7]
+- **Inversión del Flujo de Control:** Las abstracciones no deben depender de los detalles de implementación; son los detalles los que deben conformarse a las abstracciones.
+- **Inyección de Dependencias:** Este principio a menudo se implementa mediante la Inyección de Dependencias, donde las dependencias concretas se "inyectan" en un módulo en lugar de que el módulo las cree directamente.[7, 12]
+
+La inversión de dependencias promueve un acoplamiento significativamente más bajo entre los componentes del software. Cuando los módulos de alto nivel dependen de abstracciones, se vuelven independientes de las implementaciones específicas de los módulos de bajo nivel. Esto tiene varias ventajas:
+1.  **Testabilidad:** Es mucho más fácil probar los módulos de alto nivel de forma aislada, ya que se pueden "inyectar" implementaciones simuladas (mocks o stubs) de las abstracciones de las que dependen.[12]
+2.  **Flexibilidad y Mantenibilidad:** Se pueden cambiar o reemplazar las implementaciones de bajo nivel (por ejemplo, cambiar de un proveedor de base de datos a otro) sin afectar a los módulos de alto nivel, siempre que la nueva implementación se adhiera a la abstracción.
+3.  **Reusabilidad:** Los módulos de bajo nivel también pueden ser más reutilizables si solo dependen de abstracciones.
+
+En esencia, DIP ayuda a construir sistemas donde las políticas de negocio (alto nivel) no están atadas a los detalles de implementación (bajo nivel), lo que resulta en una arquitectura más adaptable y robusta.
+
+- **Ejemplo (Conceptual - Inyección de Dependencias):**
+  ```typescript
+  // Abstracción (interfaz para un notificador)
+  interface Notificador {
+    enviar(mensaje: string): void;
+  }
+
+  // Implementación de bajo nivel (detalle)
+  class NotificadorEmail implements Notificador {
+    enviar(mensaje: string): void {
+      console.log(`Enviando email: ${mensaje}`);
+    }
+  }
+
+  class NotificadorSMS implements Notificador {
+    enviar(mensaje: string): void {
+      console.log(`Enviando SMS: ${mensaje}`);
+    }
+  }
+
+  // Módulo de alto nivel (depende de la abstracción Notificador)
+  class ServicioDePedidos {
+    private notificador: Notificador;
+
+    // La dependencia se inyecta
+    constructor(notificador: Notificador) {
+      this.notificador = notificador;
+    }
+
+    procesarPedido(pedidoId: string): void {
+      console.log(`Procesando pedido ${pedidoId}...`);
+      //...lógica de procesamiento...
+      this.notificador.enviar(`El pedido ${pedidoId} ha sido procesado.`);
+    }
+  }
+
+  // Uso:
+  const notificadorEmail = new NotificadorEmail();
+  const servicioConEmail = new ServicioDePedidos(notificadorEmail);
+  servicioConEmail.procesarPedido("123");
+
+  const notificadorSMS = new NotificadorSMS();
+  const servicioConSMS = new ServicioDePedidos(notificadorSMS);
+  servicioConSMS.procesarPedido("456");

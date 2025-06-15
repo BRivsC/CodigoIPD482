@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Commits Atómicos y Frecuentes
+
+- **Unidad Lógica de Trabajo:** Cada commit debe representar un cambio lógico y cohesivo. Por ejemplo, una corrección de bug, la implementación de una pequeña parte de una característica, o una refactorización específica.[30]
+- **Commit a Menudo:** Guarda tu trabajo con commits frecuentes. Esto reduce el riesgo de perder trabajo y facilita la integración con los cambios de otros.[30]
+- **Evitar Commits Monstruosos:** No agrupes múltiples cambios no relacionados (ej. una nueva característica, varias correcciones de bugs y una refactorización) en un solo commit. Esto dificulta la revisión, la comprensión del historial y el rollback si es necesario.
+- **No Hacer Commit de Trabajo a Medias (Incompleto o Roto):** Asegúrate de que el código en cada commit esté en un estado funcional (al menos compila y pasa pruebas unitarias relevantes). Si necesitas cambiar de contexto con trabajo no terminado, considera usar `git stash`.[30]
+- **Probar Antes de Hacer Commit:** Ejecuta pruebas relevantes localmente antes de hacer commit para asegurar que no estás introduciendo regresiones.[30]
+
+Los commits pequeños y atómicos facilitan enormemente las revisiones de código, ya que los revisores pueden enfocarse en un conjunto limitado y cohesivo de cambios. También hacen que el historial del proyecto sea más fácil de entender; cada commit cuenta una pequeña parte de la historia del desarrollo. Si se necesita revertir un cambio específico, un commit atómico puede ser revertido limpiamente sin afectar otras funcionalidades no relacionadas. Hacer commit a menudo también promueve una mejor colaboración, ya que los cambios se comparten con el equipo de manera más regular, reduciendo la probabilidad de grandes conflictos de fusión.
+
+- **Ejemplo (Secuencia de commits para una pequeña característica):**
+
+Commit 1: feat(profile): añadir campo 'fechaNacimiento' al modelo de usuario
+Commit 2: feat(profile): implementar lógica de validación para 'fechaNacimiento'
+Commit 3: feat(profile): actualizar formulario de perfil para incluir 'fechaNacimiento'
+Commit 4: test(profile): añadir pruebas unitarias para validación de 'fechaNacimiento'

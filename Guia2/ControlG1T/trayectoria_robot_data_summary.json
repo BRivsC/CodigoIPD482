@@ -1,0 +1,115 @@
+{
+  "metadata": {
+    "generated_at": "2025-06-04T21:56:30.455423",
+    "description": "Resumen completo de todos los archivos de datos generados del an\u00e1lisis de trayectoria del robot",
+    "total_files": 7,
+    "robot_type": "Pioneer P3DX con potencial trailer",
+    "control_system": "PID + Campos Potenciales"
+  },
+  "files_generated": {
+    "trayectoria_robot_comparison_data.json": {
+      "graph_type": "Comparaci\u00f3n de Trayectorias",
+      "purpose": "An\u00e1lisis espacial de seguimiento de trayectoria",
+      "key_data": [
+        "Coordenadas de trayectoria planificada vs real",
+        "Waypoints originales del algoritmo de campos potenciales",
+        "M\u00e9tricas de error de seguimiento (media, m\u00e1ximo, RMS)",
+        "Datos del tr\u00e1iler si est\u00e1n disponibles",
+        "Lecturas GPS vs posici\u00f3n real"
+      ],
+      "use_case": "Evaluar qu\u00e9 tan bien sigui\u00f3 el robot el camino planificado en el espacio 2D"
+    },
+    "trayectoria_robot_tracking_errors_data.json": {
+      "graph_type": "Errores de Seguimiento vs Tiempo",
+      "purpose": "An\u00e1lisis temporal de la precisi\u00f3n de seguimiento",
+      "key_data": [
+        "Serie temporal de errores de distancia",
+        "Estad\u00edsticas de error (media, desviaci\u00f3n est\u00e1ndar, RMS)",
+        "Bandas de confianza (\u00b11\u03c3)",
+        "Evoluci\u00f3n del error a lo largo de la misi\u00f3n"
+      ],
+      "use_case": "Identificar momentos de baja precisi\u00f3n y evaluar estabilidad del control"
+    },
+    "trayectoria_robot_velocity_profile_data.json": {
+      "graph_type": "Perfil de Velocidad",
+      "purpose": "An\u00e1lisis del comportamiento din\u00e1mico del robot",
+      "key_data": [
+        "Serie temporal de velocidades lineales",
+        "Estad\u00edsticas de velocidad (media, m\u00e1x, m\u00edn, mediana)",
+        "Momentos de cambio de waypoint",
+        "Patrones de aceleraci\u00f3n/desaceleraci\u00f3n"
+      ],
+      "use_case": "Evaluar suavidad de movimiento y eficiencia de la navegaci\u00f3n"
+    },
+    "trayectoria_robot_angular_velocity_data.json": {
+      "graph_type": "Velocidad Angular",
+      "purpose": "An\u00e1lisis de maniobras y giros del robot",
+      "key_data": [
+        "Serie temporal de velocidades angulares (rad/s y \u00b0/s)",
+        "Estad\u00edsticas de giros (media, m\u00e1ximo, m\u00ednimo)",
+        "Intensidad de maniobras durante la navegaci\u00f3n"
+      ],
+      "use_case": "Evaluar agresividad de giros y estabilidad rotacional"
+    },
+    "trayectoria_robot_cross_track_data.json": {
+      "graph_type": "Error Transversal (Cross-track)",
+      "purpose": "An\u00e1lisis de desviaciones laterales del camino",
+      "key_data": [
+        "Serie temporal de errores transversales",
+        "Sesgo lateral (tendencia izquierda/derecha)",
+        "Interpretaci\u00f3n de signos (+ = derecha, - = izquierda)",
+        "Bandas de confianza para desviaciones"
+      ],
+      "use_case": "Detectar problemas de calibraci\u00f3n o tendencias sistem\u00e1ticas de deriva"
+    },
+    "trayectoria_robot_error_distribution_data.json": {
+      "graph_type": "Distribuci\u00f3n de Errores",
+      "purpose": "An\u00e1lisis estad\u00edstico de la calidad de seguimiento",
+      "key_data": [
+        "Histograma de errores de seguimiento",
+        "Percentiles de error (25\u00b0, 75\u00b0, 90\u00b0, 95\u00b0)",
+        "Distribuci\u00f3n de densidad de probabilidad",
+        "Errores brutos para an\u00e1lisis detallado"
+      ],
+      "use_case": "Caracterizar la distribuci\u00f3n de errores y identificar outliers"
+    },
+    "trayectoria_robot_velocity_distribution_data.json": {
+      "graph_type": "Distribuci\u00f3n de Velocidades",
+      "purpose": "An\u00e1lisis estad\u00edstico del comportamiento din\u00e1mico",
+      "key_data": [
+        "Histograma de velocidades",
+        "Percentiles de velocidad",
+        "Media vs mediana (simetr\u00eda de distribuci\u00f3n)",
+        "Velocidades brutas para an\u00e1lisis detallado"
+      ],
+      "use_case": "Evaluar consistencia de velocidad y detectar patrones an\u00f3malos"
+    }
+  },
+  "interpretation_guide": {
+    "error_thresholds": {
+      "excellent": "< 0.5m error promedio",
+      "good": "0.5-1.0m error promedio",
+      "regular": "1.0-2.0m error promedio",
+      "needs_improvement": "> 2.0m error promedio"
+    },
+    "velocity_analysis": {
+      "low_std": "Velocidad consistente (bueno)",
+      "high_std": "Velocidad err\u00e1tica (revisar control)",
+      "low_mean": "Robot lento (posible conservadurismo)",
+      "high_mean": "Robot r\u00e1pido (posible agresividad)"
+    },
+    "cross_track_analysis": {
+      "zero_bias": "Sin deriva sistem\u00e1tica (bueno)",
+      "positive_bias": "Deriva hacia la derecha",
+      "negative_bias": "Deriva hacia la izquierda",
+      "high_std": "Mucha variabilidad lateral"
+    }
+  },
+  "ai_analysis_prompts": {
+    "overall_performance": "Analiza las m\u00e9tricas de error promedio, m\u00e1ximo y RMS para evaluar la calidad general del seguimiento de trayectoria",
+    "temporal_patterns": "Examina las series temporales para identificar patrones, tendencias o momentos problem\u00e1ticos espec\u00edficos",
+    "statistical_distributions": "Analiza los histogramas para caracterizar la naturaleza de los errores y velocidades (normal, sesgada, multimodal)",
+    "cross_track_behavior": "Eval\u00faa el comportamiento lateral para detectar problemas de calibraci\u00f3n o algoritmos de control",
+    "velocity_consistency": "Examina la consistencia de velocidades para evaluar la suavidad y eficiencia de la navegaci\u00f3n"
+  }
+}

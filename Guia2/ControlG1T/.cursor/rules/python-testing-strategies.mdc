@@ -1,0 +1,83 @@
+---
+description: Define estrategias y mejores prácticas para testing en Python, promoviendo el uso de `pytest` por su simplicidad, el mocking efectivo y la búsqueda de una cobertura de código significativa y de calidad.
+globs: 
+alwaysApply: false
+---
+# Estrategias y Mejores Prácticas para Testing en Python
+
+- **Elegir un Framework de Pruebas:**
+    - **`pytest`:** Ampliamente recomendado para la mayoría de los proyectos Python. Ofrece una sintaxis más concisa y menos boilerplate que `unittest`. Sus fixtures son una forma poderosa de gestionar el setup y teardown de las pruebas. Tiene un rico ecosistema de plugins.
+    - **`unittest`:** Parte de la librería estándar de Python, basado en xUnit. Es una opción sólida si se prefiere no añadir dependencias externas o si se está familiarizado con patrones xUnit.
+- **Organización de Pruebas:**
+    - Crea un directorio `tests/` en la raíz de tu proyecto para albergar todos los archivos de prueba.
+    - Nombra los archivos de prueba con el prefijo `test_` (ej. `test_mi_modulo.py`) o el sufijo `_test.py` para que `pytest` (y `unittest` con descubrimiento) los encuentre automáticamente.
+    - Dentro de los archivos, nombra las funciones de prueba con el prefijo `test_` (ej. `def test_suma_positiva():`).
+- **Escribir Pruebas Unitarias Claras:**
+    - Cada prueba debe enfocarse en verificar una única pieza de lógica o comportamiento.
+    - Sigue el patrón "Arrange, Act, Assert" (AAA):
+        1.  **Arrange (Organizar):** Configura las precondiciones y las entradas necesarias para la prueba.
+        2.  **Act (Actuar):** Ejecuta la función o método que estás probando.
+        3.  **Assert (Afirmar):** Verifica que el resultado (salida o cambio de estado) sea el esperado.
+    - Usa `assert` directamente con `pytest` (ej. `assert mi_funcion(2) == 4`). `unittest` requiere métodos de aserción específicos (ej. `self.assertEqual(mi_funcion(2), 4)`).
+- **Mocking y Patching:**
+    - Utiliza `unittest.mock` (o el plugin `pytest-mock`) para aislar la unidad bajo prueba de sus dependencias externas (ej. llamadas de red, acceso a base de datos, otras clases/funciones).
+    - Mockea solo lo necesario y de la forma más específica posible.
+- **Cobertura de Código:**
+    - Utiliza herramientas como `coverage.py` (a menudo integrada con `pytest` mediante `pytest-cov`) para medir qué porcentaje de tu código está siendo ejecutado por tus pruebas.
+    - Busca una alta cobertura de código, pero recuerda que la cobertura del 100% no garantiza la ausencia de bugs. La calidad y la relevancia de las pruebas son más importantes que el simple porcentaje.
+    - Usa los informes de cobertura para identificar áreas del código que no están siendo probadas.
+- **Pruebas de Integración:** Además de las pruebas unitarias, escribe pruebas de integración para verificar cómo interactúan diferentes partes de tu aplicación.
+- **Ejecutar Pruebas Regularmente:** Integra la ejecución de pruebas en tu pipeline de CI/CD. Ejecuta las pruebas localmente antes de hacer commit o push.
+
+`pytest` a menudo mejora la experiencia del desarrollador al escribir pruebas en Python. Su sintaxis menos verbosa y la eliminación de la necesidad de clases de prueba para cada conjunto de tests (aunque se pueden usar) reducen el boilerplate. Las fixtures de `pytest` son un mecanismo elegante y potente para proporcionar datos de prueba, recursos o dependencias a las funciones de prueba de una manera reutilizable y componible. Esta facilidad de uso puede fomentar una cultura de testing más sólida, ya que reduce la fricción asociada con la escritura y el mantenimiento de las pruebas.
+
+- **Ejemplo (`pytest`):**
+  ```python
+  # archivo: calculadora.py
+  def sumar(a, b):
+      return a + b
+
+  def restar(a, b):
+      if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+          raise TypeError("Ambos operandos deben ser numéricos")
+      return a - b
+
+  # archivo: tests/test_calculadora.py
+  import pytest
+  from mi_proyecto.calculadora import sumar, restar # Asumiendo que calculadora.py está en mi_proyecto/
+
+  def test_sumar_positivos():
+      assert sumar(2, 3) == 5
+
+  def test_sumar_negativos():
+      assert sumar(-1, -5) == -6
+
+  def test_restar_basico():
+      assert restar(10, 4) == 6
+
+  def test_restar_con_error_de_tipo():
+      with pytest.raises(TypeError, match="Ambos operandos deben ser numéricos"):
+          restar("a", 3)
+
+# archivo: tests/conftest.py (pytest lo descubre automáticamente)
+import pytest
+
+@pytest.fixture
+def db_connection_mock():
+    class MockConnection:
+        def query(self, sql):
+            return [{"id": 1, "data": "sample"}]
+    print("\n(Setup de fixture db_connection_mock)")
+    yield MockConnection() # Proporciona el mock
+    print("\n(Teardown de fixture db_connection_mock)")
+
+
+# archivo: tests/test_mi_servicio.py
+# (asume una clase MiServicio que toma una conexión en su constructor)
+# from mi_proyecto.mi_servicio import MiServicio 
+
+# def test_obtener_datos_del_servicio(db_connection_mock): # La fixture se inyecta aquí
+#     servicio = MiServicio(db_connection_mock)
+#     datos = servicio.obtener_datos_importantes()
+#     assert len(datos) == 1
+#     assert datos["data"] == "sample"

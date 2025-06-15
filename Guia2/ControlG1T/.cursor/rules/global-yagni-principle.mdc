@@ -1,0 +1,36 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Principio YAGNI: No Vas a Necesitarlo
+
+- **Enfocarse en lo Actual:** Desarrolla únicamente las características y funcionalidades que son explícitamente requeridas para la iteración o el sprint actual.[4, 5]
+- **Evitar la Prematuridad:** No implementes funcionalidades, abstracciones o parámetros "por si acaso" o porque "podrían ser útiles en el futuro".
+- **Priorizar Valor Inmediato:** La prioridad debe ser entregar valor funcional que satisfaga las necesidades presentes. La especulación sobre el futuro a menudo resulta en trabajo desperdiciado.
+- **Diseño Incremental:** Adopta un enfoque de diseño incremental, construyendo y probando pequeñas piezas de funcionalidad. Si una necesidad futura se materializa, se abordará en ese momento.[4]
+
+El desarrollo de características basadas en la especulación consume tiempo y recursos valiosos. Muchas de estas funcionalidades anticipadas nunca llegan a utilizarse, o sus requisitos cambian tan significativamente para cuando podrían ser necesarias que el trabajo previo resulta inútil.[4] Este código no utilizado o incorrectamente implementado añade "peso muerto" a la base de código (code bloat), incrementando la complejidad y la sobrecarga de mantenimiento sin aportar valor real. YAGNI dirige a los desarrolladores a concentrar sus esfuerzos y recursos en las necesidades inmediatas y validadas. Al hacerlo, se optimiza la asignación de recursos, previniendo el esfuerzo desperdiciado en código innecesario y llevando a un producto más ágil, enfocado y fácil de adaptar a requisitos cambiantes, ya que no está lastrado por un gran volumen de código especulativo.
+
+- **Ejemplo (Conceptual - Parámetro de función):**
+  ```python
+  # Antes de YAGNI (Parámetro especulativo)
+  # Se añade 'formato_opcional' pensando que en el futuro se podrían necesitar otros formatos.
+  def exportar_datos(datos, destino, formato_opcional=None):
+      if formato_opcional == 'xml':
+          # Lógica para exportar a XML (aún no implementada ni requerida)
+          pass # print(f"Exportando a XML a {destino}...")
+      else:
+          # Lógica para exportar a CSV (funcionalidad actual)
+          print(f"Exportando a CSV a {destino}...")
+          #... exportar datos...
+
+  # Después de YAGNI (Solo lo necesario ahora)
+  def exportar_datos_csv(datos, destino):
+      # Lógica para exportar a CSV
+      print(f"Exportando a CSV a {destino}...")
+      #... exportar datos...
+
+  # Si en el futuro se necesita XML, se añadirá entonces:
+  # def exportar_datos_xml(datos, destino):
+  #     #... lógica para XML...

@@ -1,0 +1,53 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+title: "Principio DRY (Don't Repeat Yourself - No te Repitas)"
+description: "Asegura que cada pieza de conocimiento o lógica de negocio tenga una representación única, autoritativa y no ambigua dentro del sistema para reducir la repetición."
+type: "auto" # O 'always_include' si quieres que siempre esté presente para archivos aplicables
+globs: ["**/*.*"]
+tags: ["global", "quality", "maintainability"]
+---
+
+# Principio DRY: No te Repitas
+
+- **Identificar y Abstraer:** Busca activamente bloques de código, lógica o datos que se repiten en múltiples lugares. Una vez identificados, estos deben ser abstraídos en funciones, clases, módulos o configuraciones reutilizables.
+- **Fuente Única de Verdad:** Para cualquier pieza de información o lógica de negocio, debe existir una única fuente de verdad. Modificar esta fuente única debe propagar el cambio a todos los lugares donde se utiliza, sin necesidad de ediciones manuales múltiples.
+- **Aplicar la "Regla de Tres":** Si te encuentras escribiendo o copiando el mismo fragmento de código por tercera vez, es un fuerte indicador de que necesitas refactorizar y crear una abstracción.[1]
+- **Evitar Duplicación de Conocimiento:** DRY no se limita a la duplicación de código, sino también a la duplicación de conocimiento o intención. Si dos partes del sistema implementan la misma lógica de formas diferentes, esto viola DRY.
+
+La reducción de la repetición es un pilar para la mantenibilidad. Cuando una pieza de lógica o información se duplica, cualquier cambio necesario debe realizarse en todos los lugares donde aparece. Este proceso es propenso a errores; es fácil olvidar una instancia o introducir inconsistencias, lo que conduce directamente a bugs.[1, 2] Al abstraer la lógica común, se centraliza el punto de cambio. Esto no solo simplifica el proceso de modificación, sino que también disminuye drásticamente la probabilidad de introducir errores y reduce la carga cognitiva para los desarrolladores que intentan comprender el sistema. Un código más seco es inherentemente más fácil de mantener y evolucionar.
+
+- **Ejemplo (Conceptual):**
+  ```python
+  # Antes de DRY (Repetitivo)
+  def procesar_usuario_pedido(datos_pedido):
+      #... validación de pedido...
+      if not datos_pedido['usuario_id']:
+          raise ValueError("ID de usuario requerido")
+      #... lógica de procesamiento...
+
+  def procesar_admin_pedido(datos_pedido):
+      #... validación de pedido...
+      if not datos_pedido['admin_id']:
+          raise ValueError("ID de admin requerido para esta acción")
+      #... lógica de procesamiento...
+
+  # Después de DRY (Abstraído)
+  def validar_pedido_base(datos_pedido):
+      #... validación de pedido común...
+      pass
+
+  def procesar_usuario_pedido_dry(datos_pedido):
+      validar_pedido_base(datos_pedido)
+      if not datos_pedido['usuario_id']:
+          raise ValueError("ID de usuario requerido")
+      #... lógica de procesamiento...
+
+  def procesar_admin_pedido_dry(datos_pedido):
+      validar_pedido_base(datos_pedido)
+      if not datos_pedido['admin_id']:
+          raise ValueError("ID de admin requerido para esta acción")
+      #... lógica de procesamiento...

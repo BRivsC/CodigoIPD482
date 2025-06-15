@@ -1,0 +1,61 @@
+---
+description: Fomenta escribir comentarios que expliquen la lógica compleja, las decisiones de diseño no obvias o el 'por qué' detrás del código, en lugar de parafrasear código autoexplicativo.
+globs: 
+alwaysApply: false
+---
+- **Explicar el "Por qué":** Los comentarios deben usarse principalmente para explicar *por qué* el código está escrito de cierta manera, especialmente si la lógica no es obvia o si se tomó una decisión de diseño particular que tiene implicaciones.[13, 14, 15]
+- **Aclarar Lógica Compleja:** Si un algoritmo o una pieza de lógica es intrínsecamente compleja, un comentario puede ayudar a guiar al lector.
+- **Documentar Soluciones Alternativas o Advertencias:** Si se implementó una solución específica debido a una limitación o para evitar un problema conocido, documéntalo. Advierte sobre posibles efectos secundarios o suposiciones importantes.
+- **Evitar Comentarios Redundantes:** No comentes código que es claro y autoexplicativo. Si el código necesita un comentario para explicar *qué* hace, considera si el código podría reescribirse para ser más claro.[13, 16]
+- **Mantener Comentarios Actualizados:** Los comentarios desactualizados son peores que ningún comentario, ya que pueden inducir a error. Asegúrate de que los comentarios se actualicen cuando el código cambie.
+- **Evitar Código Comentado:** En lugar de comentar grandes bloques de código, utiliza el control de versiones para mantener el historial. El código comentado desordena y dificulta la lectura.[14]
+- **TODOs y FIXMEs:** Utiliza estos marcadores con moderación para trabajo pendiente a corto plazo. Idealmente, deberían estar vinculados a tickets en un sistema de seguimiento de problemas para que no se olviden.[14]
+
+El código en sí mismo muestra *cómo* se realiza una tarea. Sin embargo, el *porqué* —la justificación, las restricciones consideradas, las compensaciones realizadas— a menudo no es evidente solo leyendo el código. Con el tiempo, este contexto crucial se pierde a medida que los miembros del equipo cambian o los recuerdos se desvanecen. La falta de este contexto dificulta el mantenimiento y la depuración, y aumenta el riesgo de que futuras modificaciones socaven inadvertidamente principios arquitectónicos clave o reintroduzcan problemas que ya se habían resuelto. Los comentarios bien ubicados que explican el "por qué" preservan este contexto vital, mejorando significativamente la mantenibilidad y la comprensión a largo plazo, especialmente para las partes más complejas o no obvias de la base de código.
+
+- **Ejemplo:**
+  ```javascript
+  // Comentario menos útil (explica el "qué", que es obvio)
+  // Incrementa el contador en 1
+  // contador++;
+
+  // Comentario útil (explica el "por qué" de una decisión no obvia)
+  // Se utiliza un bucle manual aquí en lugar de array.map() por razones de rendimiento
+  // en conjuntos de datos muy grandes, según las pruebas realizadas en el ticket #123.
+  for (let i = 0; i < datosGrandes.length; i++) {
+    datosGrandes[i] = procesarElemento(datosGrandes[i]);
+  }
+
+
+---
+**1.4 Mantenibilidad**
+
+La mantenibilidad se refiere a la facilidad con la que un sistema de software puede ser modificado para corregir defectos, mejorar el rendimiento u otros atributos, o adaptarse a un entorno cambiado. Es un factor crítico para la longevidad y el costo total de propiedad del software.
+
+---
+**Modularidad**
+
+**Nombre del Archivo:** `global-modularity`
+**Tipo de Regla:** `Agent Requested`
+**Descripción:** "Promueve la descomposición del sistema en módulos cohesivos e independientes con interfaces bien definidas para mejorar la organización y la mantenibilidad."
+**Contenido de la Regla:**
+```mdc
+# Modularidad: Descomponer para Vencer
+
+- **Componentes Independientes:** Diseña el sistema como un conjunto de módulos o componentes que pueden ser desarrollados, probados y desplegados (si es aplicable) de forma independiente.[10, 13]
+- **Interfaces Claras:** Cada módulo debe exponer una interfaz bien definida que oculte sus detalles internos de implementación (encapsulación). La comunicación entre módulos debe ocurrir a través de estas interfaces.
+- **Responsabilidades Definidas:** Cada módulo debe tener un conjunto claro y bien definido de responsabilidades, alineándose con el Principio de Responsabilidad Única (SRP).
+
+La modularidad permite a los equipos trabajar en diferentes partes del sistema en paralelo con una interferencia mínima. Facilita las pruebas, ya que los módulos individuales pueden ser probados de forma aislada (pruebas unitarias). Además, una estructura modular mejora la organización general del código, haciendo que el sistema sea más fácil de entender, navegar y modificar. Cuando se necesita cambiar una funcionalidad, idealmente solo se necesita modificar el módulo responsable, minimizando el impacto en el resto del sistema.
+
+- **Ejemplo (Conceptual - Estructura de un sistema):**
+
+Sistema de E-commerce:
+
+    Módulo de Autenticación (maneja registro, login, sesiones)
+    Módulo de Catálogo de Productos (maneja listado, búsqueda, detalles de productos)
+    Módulo de Carrito de Compras (maneja adición, eliminación, actualización de ítems)
+    Módulo de Procesamiento de Pedidos (maneja checkout, pagos, envíos)
+    Módulo de Notificaciones (maneja envío de emails, SMS)
+
+Cada módulo tiene su propia lógica y expone APIs para que otros módulos interactúen.

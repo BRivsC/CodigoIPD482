@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- **Claridad de Intención:** Los nombres deben revelar el propósito del identificador. Pregúntate: ¿Entendería otro desarrollador (o yo mismo en seis meses) qué hace esta variable o función solo por su nombre?.[13]
+- **Evitar Abreviaturas Crípticas:** No uses abreviaturas o nombres de una sola letra (excepto para contadores de bucle simples como `i`, `j`, `k` si el contexto es muy local y claro). Prefiere `indiceUsuario` sobre `iu` o `idx`.
+- **Consistencia en la Nomenclatura:** Adopta y sigue consistentemente las convenciones de nomenclatura del lenguaje o del proyecto (ej. `camelCase` para variables y funciones en JavaScript/Java, `PascalCase` para clases, `snake_case` para variables y funciones en Python).[13]
+- **Un Propósito por Identificador:** No reutilices la misma variable para múltiples propósitos no relacionados dentro del mismo ámbito. Esto confunde la lectura y el seguimiento del estado.[13]
+- **Nombres Específicos sobre Genéricos:** Prefiere `clientesActivos` sobre `listaDeDatos`.
+- **Evitar Desinformación:** No uses nombres que puedan inducir a error sobre el tipo o propósito del identificador.
+
+Los nombres bien elegidos son una de las formas más efectivas de crear código auto-documentado. Cuando los nombres de variables, funciones y clases describen con precisión su contenido o comportamiento, se reduce significativamente la necesidad de comentarios explicativos que describan *qué* está haciendo el código. Esto permite a los desarrolladores comprender la funcionalidad más rápidamente, facilitando el mantenimiento, la depuración y la colaboración. Invertir tiempo en pensar buenos nombres es una inversión que se amortiza con creces a lo largo de la vida del proyecto.
+
+- **Ejemplo:**
+  ```javascript
+  // Malos nombres
+  let val = 10;
+  let arr = ;
+  function proc(d) {
+    //...
+  }
+
+  // Buenos nombres
+  let tiempoDeEsperaMaximoEnSegundos = 10;
+  let idsDeProductosSeleccionados = ;
+  function calcularTotalDeFactura(itemsDeFactura) {
+    //...
+  }

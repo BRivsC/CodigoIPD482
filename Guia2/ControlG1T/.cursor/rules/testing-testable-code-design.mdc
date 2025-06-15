@@ -1,0 +1,53 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Escribir Código Testeable: Diseñar para la Verificación
+
+- **Pequeñas Unidades de Lógica:** Escribe funciones y métodos que hagan una cosa bien (alta cohesión, SRP). Las unidades pequeñas y enfocadas son más fáciles de probar.
+- **Minimizar Efectos Secundarios:** Las funciones puras (aquellas que para las mismas entradas siempre producen las mismas salidas y no tienen efectos secundarios) son las más fáciles de probar. Cuando los efectos secundarios son necesarios, aíslalos tanto como sea posible.
+- **Dependencias Explícitas:** Haz que las dependencias de un módulo o función sean explícitas (ej. pasadas como parámetros) en lugar de ocultas o globales. Esto facilita la sustitución de dependencias con mocks o stubs durante las pruebas (Inyección de Dependencias).[12, 34]
+- **Evitar Lógica Compleja en Constructores:** La lógica en los constructores puede dificultar la instanciación de objetos en las pruebas. Mantén los constructores simples, enfocados en la asignación de estado inicial.
+- **Interfaces Claras:** Los módulos con interfaces bien definidas son más fáciles de probar, ya que su contrato es explícito.
+
+El esfuerzo por escribir código testeable a menudo conduce a un mejor diseño de software en general. El código que es difícil de probar suele ser una señal de problemas de diseño subyacentes, como un acoplamiento excesivo, responsabilidades mal definidas o dependencias ocultas.[35, 36] Al pensar en cómo se probará una pieza de código mientras se escribe, los desarrolladores se ven naturalmente inclinados hacia la modularidad, interfaces claras y una mejor separación de preocupaciones. Técnicas como la Inyección de Dependencias no solo mejoran la testabilidad al permitir el uso de dobles de prueba (mocks, stubs), sino que también promueven un diseño más flexible y desacoplado. Por lo tanto, diseñar para la testabilidad no es solo una cuestión de facilitar las pruebas, sino una práctica que eleva la calidad general de la arquitectura del software.
+
+- **Ejemplo (Inyección de Dependencia para Testeabilidad):**
+  ```typescript
+  // Código menos testeable (dependencia directa)
+  class ProcesadorDeDatos {
+    private servicioExterno: ServicioExternoConcreto;
+
+    constructor() {
+      this.servicioExterno = new ServicioExternoConcreto(); // Difícil de mockear
+    }
+
+    procesar(): string {
+      const datos = this.servicioExterno.obtenerDatos();
+      return `Procesado: ${datos}`;
+    }
+  }
+
+  // Código más testeable (dependencia inyectada)
+  interface IServicioExterno {
+    obtenerDatos(): string;
+  }
+
+  class ProcesadorDeDatosTesteable {
+    private servicioExterno: IServicioExterno;
+
+    constructor(servicioExterno: IServicioExterno) { // La dependencia se inyecta
+      this.servicioExterno = servicioExterno;
+    }
+
+    procesar(): string {
+      const datos = this.servicioExterno.obtenerDatos();
+      return `Procesado: ${datos}`;
+    }
+  }
+
+  // En la prueba:
+  // const mockServicio: IServicioExterno = { obtenerDatos: () => "datos_mock" };
+  // const procesador = new ProcesadorDeDatosTesteable(mockServicio);
+  // expect(procesador.procesar()).toBe("Procesado: datos_mock");

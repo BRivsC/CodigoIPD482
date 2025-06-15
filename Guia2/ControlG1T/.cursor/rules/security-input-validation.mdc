@@ -1,0 +1,51 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Seguridad: Validación Rigurosa de Entradas
+
+- **Confianza Cero en Entradas Externas:** Trata todas las entradas que provienen de fuera del sistema (formularios de usuario, parámetros de URL, cabeceras HTTP, cuerpos de solicitud de API, datos de archivos, mensajes de colas, etc.) como no confiables.[39, 40]
+- **Validar en el Servidor:** La validación del lado del cliente es útil para la experiencia del usuario, pero la validación autoritativa y de seguridad *siempre* debe realizarse en el lado del servidor, ya que la validación del cliente puede ser eludida.
+- **Criterios de Validación:**
+    - **Tipo:** ¿Es el dato del tipo esperado (string, número, booleano, fecha)?
+    - **Formato:** ¿Cumple con un formato específico (ej. email, UUID, número de teléfono)?
+    - **Longitud/Tamaño:** ¿Está dentro de los límites de longitud o tamaño permitidos?
+    - **Rango:** Si es numérico, ¿está dentro de un rango aceptable?
+    - **Valores Permitidos:** ¿Pertenece a un conjunto predefinido de valores válidos (lista blanca)?
+- **Sanitización y Escapado:** Además de la validación, sanitiza o escapa las entradas cuando se utilicen en contextos específicos para prevenir ataques de inyección (ej. usar consultas parametrizadas para SQL, escapar HTML para prevenir XSS).[41, 42]
+- **Rechazar Entradas Inválidas:** Por defecto, rechaza las entradas que no cumplan con los criterios de validación, en lugar de intentar "corregirlas".
+
+La validación de entradas es una de las defensas más fundamentales contra una amplia gama de vulnerabilidades de seguridad, incluyendo muchas del Top 10 de OWASP como Inyección (SQLi, XSS, Command Injection), Broken Access Control (si se pueden manipular IDs), y Server-Side Request Forgery (SSRF).[41, 43] Al no confiar en los datos externos y validarlos rigurosamente antes de procesarlos o almacenarlos, se reduce significativamente la superficie de ataque de la aplicación.
+
+- **Ejemplo (Conceptual - Validación de un parámetro de búsqueda):**
+  ```python
+  from flask import Flask, request, jsonify
+  import re
+
+  app = Flask(__name__)
+
+  # Lista blanca de caracteres permitidos para un término de búsqueda
+  VALID_SEARCH_TERM_PATTERN = re.compile(r"^[a-zA-Z0-9\s\-']{1,50}$")
+
+  @app.route("/buscar", methods=)
+  def buscar_productos():
+      termino_busqueda = request.args.get("q")
+
+      if not termino_busqueda:
+          return jsonify({"error": "Parámetro 'q' (término de búsqueda) es requerido."}), 400
+
+      # Validación de formato y longitud
+      if not VALID_SEARCH_TERM_PATTERN.match(termino_busqueda):
+          return jsonify({"error": "Término de búsqueda inválido."}), 400
+      
+      # Aquí se procedería a usar 'termino_busqueda' de forma segura
+      # (ej. en una consulta parametrizada a la base de datos)
+      # resultados = db.buscar(termino_busqueda) 
+      return jsonify({"resultados": f"Resultados para: {termino_busqueda}"}) # Ejemplo
+
+  # Ejemplo de uso inseguro (sin validación, vulnerable a XSS si se refleja en HTML):
+  # @app.route("/saludo")
+  # def saludo():
+  #     nombre = request.args.get("nombre")
+  #     return f"<h1>Hola, {nombre}!</h1>" # Vulnerable a XSS si 'nombre' es <script>alert(1)</script>
