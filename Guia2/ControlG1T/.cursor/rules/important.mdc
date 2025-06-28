@@ -1,6 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: true
----
-Siempre debes revisar el archivo CONTEXT_AI.md para darte el contexto y la situación del proyecto y cada vez que hagas un cambio grande en arquitectura o implementes algo nuevo debes poner lo que hiciste para que te sirva de contexto a ti

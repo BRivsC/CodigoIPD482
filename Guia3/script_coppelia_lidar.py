@@ -68,28 +68,54 @@ def validate_trajectory_continuity(waypoints, max_jump=5.0):
 
 
 # Nuevo: Pega hecha con lidar
+# def read_lidar_data(sim, lidar_handle):
+#     """
+#     Lee los datos del LIDAR Hokuyo desde CoppeliaSim.
+#     Retorna dos arrays: ángulos (rad) y distancias (m).
+#     """
+#     # Obtener datos del LIDAR 
+#     #res, data = sim.simxGetStringSignal(sim.simx_service, 'measuredDataAtThisTime', sim.simx_opmode_buffer)
+#     #            return self.sim.getObjectOrientation(self.trailer_handle, -1)
+#     #res, data = sim.getStringSignal(sim.simx_service, 'measuredDataAtThisTime', sim.simx_opmode_buffer)
+#     data = sim.getStringSignal('measuredDataAtThisTime')
+
+
+#     # Desempaquetar los datos (asume formato [x1, y1, x2, y2, ...])
+#     #points = sim.unpackFloats(data)
+#     points = sim.unpackFloatTable(data)
+#     xs = points[0::3]
+#     ys = points[1::3]
+#     # Convertir a ángulos y distancias
+#     angles = np.arctan2(ys, xs)
+#     distances = np.sqrt(np.array(xs)**2 + np.array(ys)**2)
+#     return angles, distances
+
 def read_lidar_data(sim, lidar_handle):
     """
-    Lee los datos del LIDAR Hokuyo desde CoppeliaSim.
+    Lee los datos del LIDAR Hokuyo desde CoppeliaSim usando la nueva API (ZeroMQ).
     Retorna dos arrays: ángulos (rad) y distancias (m).
     """
-    # Obtener datos del LIDAR (ajusta si tu API es diferente)
-    # Aquí se asume que sim.simxGetStringSignal devuelve los datos del LIDAR serializados
-    # y que puedes usar sim.simxUnpackFloats para obtener los valores.
-    # Si usas pycoppeliasim, puede ser sim.readProximitySensor o similar.
-    res, data = sim.simxGetStringSignal(sim.simx_service, 'measuredDataAtThisTime', sim.simx_opmode_buffer)
-    if res != 0 or not data:
-        print("No se pudieron leer datos del LIDAR.")
-        return None, None
+    try:
+        # Obtener datos del LIDAR
+        #data = sim.getStringSignal('measuredDataAtThisTime')
+        #data = sim.getStringSignal(lidar_handle,'measuredDataAtThisTime') # 
+        data = sim.getStringSignal(lidar_handle,'measuredDataAtThisTime') 
+        print("Data: ", data)
+        if not data:
+            print("No se pudieron leer datos del LIDAR.")
+            return None, None
 
-    # Desempaquetar los datos (asume formato [x1, y1, x2, y2, ...])
-    points = sim.simxUnpackFloats(data)
-    xs = points[0::3]
-    ys = points[1::3]
-    # Convertir a ángulos y distancias
-    angles = np.arctan2(ys, xs)
-    distances = np.sqrt(np.array(xs)**2 + np.array(ys)**2)
-    return angles, distances
+        # Desempaquetar los datos (asume formato [x1, y1, z1, x2, y2, z2, ...])
+        points = sim.unpackFloatTable(data)
+        xs = points[0::3]
+        ys = points[1::3]
+        # Convertir a ángulos y distancias
+        angles = np.arctan2(ys, xs)
+        distances = np.sqrt(np.array(xs)**2 + np.array(ys)**2)
+        return angles, distances
+    except Exception as e:
+        print(f"Error leyendo datos del LIDAR: {e}")
+        return None, None
 
 def plot_lidar_data(sim, lidar_handle):
     """
@@ -270,7 +296,7 @@ def main():
         # Get initial time
         start_time = sim_env.get_simulation_time()
         robot.set_start_time(start_time)
-        
+        print(start_time)
         # Configurar tolerancia más adecuada para trayectorias largas
         original_max_error = robot.max_error
         robot.max_error = 1.5  # Tolerancia más generosa para waypoints intermedios
@@ -312,6 +338,8 @@ def main():
                 # Registrar en el visualizador
                 elapsed_time = current_time - start_time
                 visualizer.record_data(elapsed_time, real_position, gps_position, trailer_position)
+                print("Handle: ",handles['lidar'])
+                print(read_lidar_data(sim_env.sim, handles['lidar']))
                 
                 # If waypoint reached, go to next one
                 if waypoint_reached:
@@ -319,7 +347,7 @@ def main():
                     successful_waypoints += 1
                     print(f"✓ Waypoint {waypoint_idx+1} alcanzado en {attempts} intentos!")
                     break
-            
+                
             # Si no se alcanzó el waypoint, continuar al siguiente
             if attempts >= max_attempts:
                 print(f"⚠️  Timeout en waypoint {waypoint_idx+1}, continuando...")
