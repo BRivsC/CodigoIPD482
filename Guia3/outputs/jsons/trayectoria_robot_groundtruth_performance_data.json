@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "generated_at": "2025-06-28T08:26:32.115121",
+    "description": "Errores promedio y desviaci\u00f3n est\u00e1ndar de EKF y Odometry respecto a la trayectoria real",
+    "data_type": "robot_trajectory_analysis",
+    "units": {
+      "time": "seconds",
+      "position": "meters",
+      "velocity": "meters/second",
+      "angular_velocity": "radians/second",
+      "error": "meters"
+    }
+  },
+  "data": {
+    "EKF": {
+      "mean": 0.1277312161749203,
+      "std": 0.07755926984361487
+    },
+    "Odom": {
+      "mean": 1.9238524319937165,
+      "std": 1.1640121579808764
+    }
+  }
+}

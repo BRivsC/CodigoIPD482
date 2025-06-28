@@ -28,12 +28,16 @@ class PIDController:
         # Proportional term
         p_term = self.kp * error
         
-        # Integral term
-        self.integral += error * dt
+        # Integral term (acumula sólo si dt positivo)
+        if dt > 0:
+            self.integral += error * dt
         i_term = self.ki * self.integral
         
-        # Derivative term
-        d_term = self.kd * (error - self.previous_error) / dt
+        # Derivative term – evita división por cero
+        if dt > 0:
+            d_term = self.kd * (error - self.previous_error) / dt
+        else:
+            d_term = 0.0
         self.previous_error = error
         
         # Controller output

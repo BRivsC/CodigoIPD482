@@ -17,11 +17,16 @@ El repositorio está organizado en carpetas que corresponden a las distintas gu�
   - **`PathPlanning/`**: Código para generar trayectorias utilizando RTT y Campos potenciales.
   - **`TestsModeloDin/`**: Implementaciones del modelo dinámico del sistema G1T.
   - **`demo/`**: Videos de demostración.
-  - **`old/`**: Código utilizado anteriormente para prototipado y ensayos.
   - **`IPD482_guia2_2025_1.pdf`**: Archivo con las preguntas desarrolladas durante este trabajo.
   
-- **Otras carpetas**: Se agregarán a medida que se desarrollen más ejercicios y proyectos.
+- **`Guia3/`**: Contiene los ejercicios relacionados con la simulación de un sistema G1T aplicando SLAM.
+  - **`components/`**: Scripts con distintas funciones y objetos desarrollados para distintas tareas.
+  - **`coppelia/`**: Escenario de CoppeliaSim con el robot, entorno y sensores.
+  - **`outputs/`**: Salidas obtenidas del programa, como imágenes y archivos `.json` con los datos obtenidos.
+  
 
 ## Requisitos
 
-Para ejecutar los códigos de este repositorio se utilizó MATLAB Online, versión R2024b Update 5
+Para ejecutar los códigos de la guía 1 se utilizó MATLAB Online, versión R2024b Update 5
+
+En guía 2 y guía 3 se utilizó Python y CoppeliaSim

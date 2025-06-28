@@ -13,10 +13,10 @@ class RobotController:
             sensors: GPSSensor instance
         """
         # Control gains - ajustados para mejor estabilidad
-        self.kp = 4.0  # Reducido para menos agresividad
-        self.ki = 0.02  # Reducido para menos windup
-        self.kd = 0.1   # Agregado para mejor estabilidad
-        
+        self.kp = 5.0  # Reducido para menos agresividad
+        self.ki = 0.1  # Reducido para menos windup
+        self.kd = 0.05   # Agregado para mejor estabilidad
+
         self.sim = simulation
         self.sensors = sensors
         
@@ -26,7 +26,7 @@ class RobotController:
         
         # Control limits
         self.max_error = 0.1
-        self.max_velocity = 8.5   # Velocidad máxima [m/s]
+        self.max_velocity = 3.5   # Velocidad máxima [m/s]
         self.max_angular = 0.5    # Velocidad angular máxima [rad/s]
         self.min_velocity = 0.1   # Velocidad mínima para evitar paradas
         
@@ -46,7 +46,8 @@ class RobotController:
         """Apply velocity smoothing to avoid abrupt changes."""
         return self.velocity_smoothing * prev_vel + (1 - self.velocity_smoothing) * new_vel
         
-    def navigate_to_waypoint(self, target_position, visualizer=None):
+    def navigate_to_waypoint(self, target_position, pose_override=None, visualizer=None):
+
         """Navigate robot to a target waypoint.
         
         Args:
@@ -59,11 +60,20 @@ class RobotController:
         sim = self.sim.sim
         handles = self.sim.handles
         
-        # Get current positions and orientations
-        gps_position = self.sensors.get_position()
-        real_position = self.sensors.get_real_position()
-        trailer_position = self.sensors.get_trailer_position()
-        current_orientation = self.sensors.get_orientation()
+        # ------------------------------------------------------------------
+        # Obtener la pose que usará el controlador
+        if pose_override is not None:
+            # pose_override = (x, y, theta) del EKF
+            gps_position        = [pose_override[0], pose_override[1], 0.0]
+            current_orientation = [0.0, 0.0, pose_override[2]]
+        else:
+            gps_position        = self.sensors.get_position()
+            current_orientation = self.sensors.get_orientation()
+
+        real_position     = self.sensors.get_real_position()
+        trailer_position  = self.sensors.get_trailer_position()
+        # ------------------------------------------------------------------
+
         
         # Calculate distance error using GPS position
         dist_error = distance(gps_position, target_position)
@@ -143,3 +153,4 @@ class RobotController:
         self.start_time = start_time
         self.prev_time = start_time
         self.debug_counter = 0 
+        
