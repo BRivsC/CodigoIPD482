@@ -194,7 +194,7 @@ def escape_local_minimum(ix, iy, pmap, motion, minx, miny, reso, goal_x, goal_y)
     return ix, iy
 
 
-def potential_field_planning(start_x, start_y, goal_x, goal_y, obstacle_x, obstacle_y, reso, robot_width, robot_length):
+def potential_field_planning(start_x, start_y, goal_x, goal_y, obstacle_x, obstacle_y, reso, robot_width, robot_length, show_animation=False):
     # calc potential field
     pmap, minx, miny = calc_potential_field(goal_x, goal_y, obstacle_x, obstacle_y, reso, robot_width, robot_length, start_x, start_y)
 
@@ -204,7 +204,7 @@ def potential_field_planning(start_x, start_y, goal_x, goal_y, obstacle_x, obsta
     iy = round((start_y - miny) / reso)
     gix = round((goal_x - minx) / reso)
     giy = round((goal_y - miny) / reso)
-
+    
     if show_animation:
         draw_heatmap(pmap)
         # for stopping simulation with the esc key.

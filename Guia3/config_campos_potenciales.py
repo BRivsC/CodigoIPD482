@@ -11,10 +11,14 @@ def get_config():
     
     config = {
         # Parámetros de inicio y objetivo
-        'start_x': -12.0,
-        'start_y': -12.0,
-        'goal_x': 9.0,
-        'goal_y': 7.0,
+        # 'start_x': -12.0,
+        # 'start_y': -12.0,
+        # 'goal_x': 9.0,
+        # 'goal_y': 7.0,
+        'start_x': 10.0,
+        'start_y': -10.0,
+        'goal_x': -9.0,
+        'goal_y': 8.0,
         'grid_size': 0.5,
         
         # Dimensiones del robot (rectangular)

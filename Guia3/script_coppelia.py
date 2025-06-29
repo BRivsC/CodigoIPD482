@@ -240,7 +240,7 @@ def main():
 
     path_x, path_y = potential_field_planning(
         start_x, start_y, goal_x, goal_y,
-        obstacle_x, obstacle_y, grid_size, robot_width, robot_length
+        obstacle_x, obstacle_y, grid_size, robot_width, robot_length, show_animation=False
     )
 
     waypoints = [[x, y, altura] for x, y in zip(path_x, path_y)]
